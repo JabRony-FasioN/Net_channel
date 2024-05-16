@@ -1,0 +1,4 @@
+gcc -o bin/tun src/tun.c src/common_mod.c src/openssl_mod.c src/first_adres.c src/second_adres.c src/first_ssl_adres.c src/second_ssl_adres.c -lpthread -lssl -lcrypto
+
+
+echo "Done compile!"

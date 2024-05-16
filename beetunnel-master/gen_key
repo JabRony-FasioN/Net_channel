@@ -1,0 +1,13 @@
+key_dir=key
+
+private_key="$key_dir/private_key.pem"
+private_password=12345678
+
+certificate="key/certificate.crt"
+certificate_info="/C=BY/ST=Vitebsk/O=Malidi Corp./CN=93.84.112.126"
+
+rm "$private_key"
+rm "$certificate"
+
+openssl genpkey -algorithm bign -pkeyopt params:bign-curve256v1 -out "$private_key"
+openssl req -x509 -subj "$certificate_info" -new -key "$private_key" -nodes -out "$certificate" -days 1825 -passout pass:$private_password

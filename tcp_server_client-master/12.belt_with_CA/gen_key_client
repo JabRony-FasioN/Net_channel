@@ -1,0 +1,6 @@
+openssl genpkey -algorithm bign -pkeyopt params:bign-curve256v1 -out client.key
+openssl req -new -key client.key -out client.csr -subj "/C=BY/ST=Vitebsk/L=Polotsk/O=Malidi/OU=virtualbox/CN=192.168.0.135/emailAddress=info@malidi.by"
+scp pi@192.168.0.135:/home/pi/app/cert/root.crt /home/dibianv/app/cert/root.crt
+scp pi@192.168.0.135:/home/pi/app/cert/root.key /home/dibianv/app/cert/root.key
+openssl x509 -req -engine bee2evp -in client.csr -CA root.crt -CAkey root.key -CAcreateserial -out client.crt -days 365
+cat client.key client.crt >client.pem

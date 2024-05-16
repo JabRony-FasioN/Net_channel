@@ -1,0 +1,26 @@
+key_dir=key
+root_key="$key_dir/root.key"
+root_crt="$key_dir/root.crt"
+server_key="$key_dir/server.key"
+server_csr="$key_dir/server.csr"
+server_crt="$key_dir/server.crt"
+server_pem="$key_dir/server.pem"
+
+certificate_info="/C=BY/ST=Vitebsk/L=Polotsk/O=Malidi/OU=root/CN=93.84.112.126/emailAddress=info@malidi.by"
+
+#rm "$root_key"
+#rm "$root_crt"
+#rm "$server_key"
+#rm "$server_csr"
+#rm "$server_crt"
+#rm "$server_pem"
+#rm "$certificate_info"
+
+openssl genrsa -out "$root_key" 4096
+openssl req -key "$root_key" -new -x509 -subj "$certificate_info" -days 7300 -out "$root_crt"
+openssl genpkey -engine bee2evp -algorithm bign -pkeyopt params:bign-curve256v1 -out "$server_key"
+openssl req -engine bee2evp -new -key "$server_key" -out "$server_csr" -subj "$certificate_info"
+openssl x509 -req -engine bee2evp -in "$server_csr" -CA "$root_crt" -CAkey "$root_key" -CAcreateserial -out "$server_crt" -days 7300
+cat "$server_key" "$server_crt" > "$server_pem"
+
+

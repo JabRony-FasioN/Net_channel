@@ -1,0 +1,6 @@
+openssl genrsa -out root.key 4096
+openssl req -key root.key -new -x509 -subj "/C=BY/ST=Vitebsk/L=Polotsk/O=Malidi/OU=virtualbox/CN=192.168.0.135/emailAddress=info@malidi.by" -days 7300 -out root.crt
+openssl genpkey -algorithm bign -pkeyopt params:bign-curve256v1 -out server.key
+openssl req -new -key server.key -out server.csr -subj "/C=BY/ST=Vitebsk/L=Polotsk/O=Malidi/OU=virtualbox/CN=192.168.0.135/emailAddress=info@malidi.by"
+openssl x509 -req -engine bee2evp -in server.csr -CA root.crt -CAkey root.key -CAcreateserial -out server.crt -days 365
+cat server.key server.crt >server.pem

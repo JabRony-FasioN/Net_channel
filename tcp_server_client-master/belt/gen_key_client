@@ -1,0 +1,22 @@
+key_dir=key
+root_key="$key_dir/root.key"
+root_crt="$key_dir/root.crt"
+client_key="$key_dir/client.key"
+client_csr="$key_dir/client.csr"
+client_crt="$key_dir/client.crt"
+client_pem="$key_dir/client.pem"
+
+certificate_info="/C=BY/ST=Vitebsk/L=Polotsk/O=Malidi/OU=scud/CN=93.84.112.126/emailAddress=info@malidi.by"
+
+#rm "$root_key"
+#rm "$root_crt"
+#rm "$client_key"
+#rm "$client_csr"
+#rm "$client_crt"
+#rm "$client_pem"
+#rm "$certificate_info"
+
+openssl genpkey -engine bee2evp -algorithm bign -pkeyopt params:bign-curve256v1 -out "$client_key"
+openssl req -new -key "$client_key" -out "$client_csr" -subj "$certificate_info"
+openssl x509 -req -engine bee2evp -in "$client_csr" -CA "$root_crt" -CAkey "$root_key" -CAcreateserial -out "$client_crt" -days 365
+cat "$client_key" "$client_crt" >"$client_pem"
